@@ -14,9 +14,10 @@ namespace RefactorThis.Controllers
             return new Products();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("{id}/product")]
         public Product Get(Guid id)
-        {
+        { 
             var product = new Product(id);
             if (product.IsNew)
                 throw new Exception();
