@@ -4,36 +4,36 @@ using Newtonsoft.Json;
 
 namespace RefactorThis.Models
 {
-    public class Products
-    {
-        public List<Product> Items { get; private set; }
+    //public class Products
+    //{
+    //    public List<Product> Items { get; private set; }
 
-        public Products()
-        {
-            LoadProducts(null);
-        }
+    //    public Products()
+    //    {
+    //        LoadProducts(null);
+    //    }
 
-        public Products(string name)
-        {
-            LoadProducts($"where lower(name) like '%{name.ToLower()}%'");
-        }
+    //    public Products(string name)
+    //    {
+    //        LoadProducts($"where lower(name) like '%{name.ToLower()}%'");
+    //    }
 
-        private void LoadProducts(string where)
-        {
-            Items = new List<Product>();
-            var conn = Helpers.NewConnection();
-            conn.Open();
-            var cmd = conn.CreateCommand();
-            cmd.CommandText = $"select id from Products {where}";
+    //    private void LoadProducts(string where)
+    //    {
+    //        Items = new List<Product>();
+    //        var conn = Helpers.NewConnection();
+    //        conn.Open();
+    //        var cmd = conn.CreateCommand();
+    //        cmd.CommandText = $"select id from Products {where}";
 
-            var rdr = cmd.ExecuteReader();
-            while (rdr.Read())
-            {
-                var id = Guid.Parse(rdr.GetString(0));
-                Items.Add(new Product(id));
-            }
-        }
-    }
+    //        var rdr = cmd.ExecuteReader();
+    //        while (rdr.Read())
+    //        {
+    //            var id = Guid.Parse(rdr.GetString(0));
+    //            Items.Add(new Product(id));
+    //        }
+    //    }
+    //}
 
     public class Product
     {
@@ -47,7 +47,7 @@ namespace RefactorThis.Models
 
         public decimal DeliveryPrice { get; set; }
 
-        [JsonIgnore] public bool IsNew { get; }
+        [JsonIgnore] public bool IsNew { get; set; }
 
         public Product()
         {
@@ -58,6 +58,7 @@ namespace RefactorThis.Models
         public Product(Guid id)
         {
             IsNew = true;
+           
             var conn = Helpers.NewConnection();
             conn.Open();
             var cmd = conn.CreateCommand();
@@ -75,21 +76,31 @@ namespace RefactorThis.Models
             DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString());
         }
 
-        public void Save()
-        {
-            var conn = Helpers.NewConnection();
-            conn.Open();
-            var cmd = conn.CreateCommand();
+        //public void Save()
+        //{
+        //    saveProducts();
+        //}
 
-            cmd.CommandText = IsNew
-                ? $"insert into Products (id, name, description, price, deliveryprice) values ('{Id}', '{Name}', '{Description}', {Price}, {DeliveryPrice})"
-                : $"update Products set name = '{Name}', description = '{Description}', price = {Price}, deliveryprice = {DeliveryPrice} where id = '{Id}' collate nocase";
+        //private void saveProducts()
+        //{
+        //    var conn = Helpers.NewConnection();
+        //    conn.Open();
+        //    var cmd = conn.CreateCommand();
 
-            conn.Open();
-            cmd.ExecuteNonQuery();
-        }
+        //    cmd.CommandText = IsNew
+        //        ? $"insert into Products (id, name, description, price, deliveryprice) values ('{Id}', '{Name}', '{Description}', {Price}, {DeliveryPrice})"
+        //        : $"update Products set name = '{Name}', description = '{Description}', price = {Price}, deliveryprice = {DeliveryPrice} where id = '{Id}' collate nocase";
+
+        //    conn.Open();
+        //    cmd.ExecuteNonQuery();
+        //}
 
         public void Delete()
+        {
+            DeleteProduct();
+        }
+
+        private void DeleteProduct()
         {
             foreach (var option in new ProductOptions(Id).Items)
                 option.Delete();

@@ -1,18 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RefactorThis.Models;
+using RefactorThis.Services;
 
 namespace RefactorThis.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : Controller
     {
-        [HttpGet]
-        public Products Get()
+        private readonly IProductService _productService;
+
+        public ProductsController(IProductService productService)
         {
-            return new Products();
+            _productService = productService;
         }
+        
+        [HttpGet]
+        public List<Product> Get()
+        {
+            return _productService.LoadProducts();
+            //return new Products();
+        }
+
+       
 
         [HttpGet]
         [Route("{id}/product")]
@@ -28,11 +41,11 @@ namespace RefactorThis.Controllers
         [HttpPost]
         public void Post(Product product)
         {
-            product.Save();
+            _productService.Save(product);
         }
 
         [HttpPut("{id}")]
-        public void Update(Guid id, Product product)
+        public  void Update(Guid id, Product product)
         {
             var orig = new Product(id)
             {
@@ -43,7 +56,7 @@ namespace RefactorThis.Controllers
             };
 
             if (!orig.IsNew)
-                orig.Save();
+               _productService.Save(orig);
         }
 
         [HttpDelete("{id}")]
