@@ -56,44 +56,48 @@ namespace RefactorThis.Controllers
         public List<ProductOption> GetOptions(Guid productId)
         {
             return _productOptionService.GetOptions(productId);
-            //return new ProductOptions(productId);
+            
         }
 
         [HttpGet("{productId}/options/{id}")]
         public ProductOption GetOption(Guid productId, Guid id)
         {
-            var option = new ProductOption(id);
-            if (option.IsNew)
-                throw new Exception();
+            return _productOptionService.GetOption(productId, id);
+            //var option = new ProductOption(id);
+            //if (option.IsNew)
+            //    throw new Exception();
 
-            return option;
+            //return option;
         }
 
         [HttpPost("{productId}/options")]
         public void CreateOption(Guid productId, ProductOption option)
         {
-            option.ProductId = productId;
-            option.Save();
+            _productOptionService.UpdateOption(productId,option);
+            //option.ProductId = productId;
+            //option.Save();
         }
 
         [HttpPut("{productId}/options/{id}")]
         public void UpdateOption(Guid id, ProductOption option)
         {
-            var orig = new ProductOption(id)
-            {
-                Name = option.Name,
-                Description = option.Description
-            };
+             _productOptionService.UpdateOption(id, option);
+            //var orig = new ProductOption(id)
+            //{
+            //    Name = option.Name,
+            //    Description = option.Description
+            //};
 
-            if (!orig.IsNew)
-                orig.Save();
+            //if (!orig.IsNew)
+            //    orig.Save();
         }
 
         [HttpDelete("{productId}/options/{id}")]
         public void DeleteOption(Guid id)
         {
-            var opt = new ProductOption(id);
-            opt.Delete();
+             _productOptionService.DeleteOption(id);
+            //var opt = new ProductOption(id);
+            //opt.Delete();
         }
     }
 }

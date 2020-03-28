@@ -69,7 +69,7 @@ namespace RefactorThis.Models
 
         public string Description { get; set; }
 
-        [JsonIgnore] public bool IsNew { get; }
+        [JsonIgnore] public bool IsNew { get; set; }
 
         public ProductOption()
         {

@@ -12,7 +12,7 @@ namespace RefactorThis.Repository
         List<ProductOption> GetOptions(Guid productId);
 
 
-        ProductOption GetOption(Guid productId, Guid id);
+        ProductOption GetOption( Guid id);
 
         List<ProductOption> GetOption();
 

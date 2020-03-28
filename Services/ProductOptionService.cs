@@ -26,8 +26,14 @@ namespace RefactorThis.Services
 
         public ProductOption GetOption(Guid productId, Guid id)
         {
-            _productOptionRepository.GetOption(productId,id);
-            throw new NotImplementedException();
+            if (_productOptionRepository.GetOption( id).IsNew)
+            {
+                throw new Exception();
+            }
+            else {
+                return _productOptionRepository.GetOption( id);  
+            }
+            
         }
 
         public List<ProductOption> GetOption()
