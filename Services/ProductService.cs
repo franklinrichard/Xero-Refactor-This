@@ -43,6 +43,9 @@ namespace RefactorThis.Services
             else { return _productRepository.LoadProducts(id); }
         }
 
-       
+        public void DeleteProduct(Guid id)
+        {
+            _productRepository.DeleteProduct(id);
+        }
     }
 }

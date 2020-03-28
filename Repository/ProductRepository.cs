@@ -32,7 +32,8 @@ namespace RefactorThis.Repository
             while (rdr.Read())
             {
                 var id = Guid.Parse(rdr.GetString(0));
-                Items.Add(new Product(id));
+                //Items.Add(new Product(id));
+                Items.Add(LoadProducts(id));
             }
             return Items;
         }
@@ -92,6 +93,20 @@ namespace RefactorThis.Repository
                 this.saveProduct(product);
             }
             else { throw new Exception(); }
+        }
+
+        public void DeleteProduct(Guid id)
+        {
+            foreach (var option in new ProductOptions(id).Items)
+                option.Delete();
+
+            var conn = Helpers.NewConnection();
+            conn.Open();
+            var cmd = conn.CreateCommand();
+
+            cmd.CommandText = $"delete from Products where id = '{id}' collate nocase";
+            cmd.ExecuteNonQuery();
+            
         }
     }
 }

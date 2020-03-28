@@ -12,10 +12,12 @@ namespace RefactorThis.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IProductOptionService _productOptionService;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService, IProductOptionService productOptionService)
         {
             _productService = productService;
+            _productOptionService = productOptionService;
         }
         
         [HttpGet]
@@ -47,14 +49,14 @@ namespace RefactorThis.Controllers
         [HttpDelete("{id}")]
         public void Delete(Guid id)
         {
-            var product = new Product(id);
-            product.Delete();
+            _productService.DeleteProduct(id);
         }
 
         [HttpGet("{productId}/options")]
-        public ProductOptions GetOptions(Guid productId)
+        public List<ProductOption> GetOptions(Guid productId)
         {
-            return new ProductOptions(productId);
+            return _productOptionService.GetOptions(productId);
+            //return new ProductOptions(productId);
         }
 
         [HttpGet("{productId}/options/{id}")]

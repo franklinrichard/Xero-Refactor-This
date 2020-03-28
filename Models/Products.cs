@@ -4,36 +4,7 @@ using Newtonsoft.Json;
 
 namespace RefactorThis.Models
 {
-    //public class Products
-    //{
-    //    public List<Product> Items { get; private set; }
-
-    //    public Products()
-    //    {
-    //        LoadProducts(null);
-    //    }
-
-    //    public Products(string name)
-    //    {
-    //        LoadProducts($"where lower(name) like '%{name.ToLower()}%'");
-    //    }
-
-    //    private void LoadProducts(string where)
-    //    {
-    //        Items = new List<Product>();
-    //        var conn = Helpers.NewConnection();
-    //        conn.Open();
-    //        var cmd = conn.CreateCommand();
-    //        cmd.CommandText = $"select id from Products {where}";
-
-    //        var rdr = cmd.ExecuteReader();
-    //        while (rdr.Read())
-    //        {
-    //            var id = Guid.Parse(rdr.GetString(0));
-    //            Items.Add(new Product(id));
-    //        }
-    //    }
-    //}
+   
 
     public class Product
     {
@@ -53,64 +24,6 @@ namespace RefactorThis.Models
         {
             Id = Guid.NewGuid();
             IsNew = true;
-        }
-
-        public Product(Guid id)
-        {
-            IsNew = true;
-           
-            var conn = Helpers.NewConnection();
-            conn.Open();
-            var cmd = conn.CreateCommand();
-            cmd.CommandText = $"select * from Products where id = '{id}' collate nocase";
-
-            var rdr = cmd.ExecuteReader();
-            if (!rdr.Read())
-                return;
-
-            IsNew = false;
-            Id = Guid.Parse(rdr["Id"].ToString());
-            Name = rdr["Name"].ToString();
-            Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString();
-            Price = decimal.Parse(rdr["Price"].ToString());
-            DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString());
-        }
-
-        //public void Save()
-        //{
-        //    saveProducts();
-        //}
-
-        //private void saveProducts()
-        //{
-        //    var conn = Helpers.NewConnection();
-        //    conn.Open();
-        //    var cmd = conn.CreateCommand();
-
-        //    cmd.CommandText = IsNew
-        //        ? $"insert into Products (id, name, description, price, deliveryprice) values ('{Id}', '{Name}', '{Description}', {Price}, {DeliveryPrice})"
-        //        : $"update Products set name = '{Name}', description = '{Description}', price = {Price}, deliveryprice = {DeliveryPrice} where id = '{Id}' collate nocase";
-
-        //    conn.Open();
-        //    cmd.ExecuteNonQuery();
-        //}
-
-        public void Delete()
-        {
-            DeleteProduct();
-        }
-
-        private void DeleteProduct()
-        {
-            foreach (var option in new ProductOptions(Id).Items)
-                option.Delete();
-
-            var conn = Helpers.NewConnection();
-            conn.Open();
-            var cmd = conn.CreateCommand();
-
-            cmd.CommandText = $"delete from Products where id = '{Id}' collate nocase";
-            cmd.ExecuteNonQuery();
         }
     }
 
