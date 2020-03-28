@@ -9,6 +9,7 @@ namespace RefactorThis.Services
 {
     public class ProductService : IProductService
     {
+        
         private readonly IProductRepository _productRepository;
 
         public ProductService(IProductRepository productRepository)
@@ -21,9 +22,10 @@ namespace RefactorThis.Services
             return _productRepository.LoadProducts();
         }
 
-        public Products LoadProducts(Guid id)
+        public void UpdateProduct(Guid id, Product product)
         {
-            throw new NotImplementedException();
+            _productRepository.UpdateProduct(id, product);
+          
         }
 
         public void Save(Product product)
@@ -31,5 +33,16 @@ namespace RefactorThis.Services
             //validate
             _productRepository.saveProduct(product);
         }
+
+        Product IProductService.LoadProducts(Guid id)
+        {
+            if (_productRepository.LoadProducts(id).IsNew)
+            {
+                throw new Exception();
+            }
+            else { return _productRepository.LoadProducts(id); }
+        }
+
+       
     }
 }

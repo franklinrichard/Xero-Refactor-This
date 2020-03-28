@@ -10,6 +10,8 @@ namespace RefactorThis.Repository
     public interface IProductRepository
     {
         void saveProduct(Product product);
+        void UpdateProduct(Guid id, Product product);
         List<Product> LoadProducts();
+        Product LoadProducts(Guid id);
     }
 }

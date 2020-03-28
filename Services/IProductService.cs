@@ -6,7 +6,8 @@ namespace RefactorThis.Services
 {
     public interface IProductService
     {
-        Products LoadProducts(Guid id);
+        Product LoadProducts(Guid id);
+        void UpdateProduct(Guid id,Product product);
         List<Product> LoadProducts();
         void Save(Product product);
     }

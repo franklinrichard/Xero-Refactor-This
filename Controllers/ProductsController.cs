@@ -22,20 +22,13 @@ namespace RefactorThis.Controllers
         public List<Product> Get()
         {
             return _productService.LoadProducts();
-            //return new Products();
         }
-
-       
-
+        
         [HttpGet]
         [Route("{id}/product")]
         public Product Get(Guid id)
-        { 
-            var product = new Product(id);
-            if (product.IsNew)
-                throw new Exception();
-
-            return product;
+        {
+             return _productService.LoadProducts(id);
         }
 
         [HttpPost]
@@ -47,16 +40,8 @@ namespace RefactorThis.Controllers
         [HttpPut("{id}")]
         public  void Update(Guid id, Product product)
         {
-            var orig = new Product(id)
-            {
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                DeliveryPrice = product.DeliveryPrice
-            };
-
-            if (!orig.IsNew)
-               _productService.Save(orig);
+            _productService.UpdateProduct(id,product);
+           
         }
 
         [HttpDelete("{id}")]
